@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('layouts/header'); -%>
+
+<body>
+  <%- include('layouts/navbar'); -%>
+  <!-- Page Header -->
+  <header class="masthead" style="background-image: url('img/home-bg.jpg')">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <div class="site-heading">
+            <h1>Clean Blog</h1>
+            <span class="subheading">A Blog Theme by Start Bootstrap</span>
+          </div>
+        </div>
+      </div>
+    </div>  
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+        <% for (var i = 0; i < blogposts.length; i++) { %>
+        <div class="post-preview">
+          <a href="/post/<%= blogposts[i]._id %>">
+            <h2 class="post-title">
+              <%= blogposts[i].title %>
+            </h2>
+            <h3 class="post-subtitle">
+              <%= blogposts[i].body %>
+            </h3>
+            <img src="<%= blogposts[i].image %>" alt="ảnh">
+          </a>
+          <p class="post-meta">Posted by
+            <a href="#"><%= blogposts[i].username %></a>
+            on <%= blogposts[i].datePosted.toDateString() %></p>
+          <div>
+           <span style="height: 50px;width: 100px;background-color: red;text-align: center;">
+            <a href="/buy" style="color:white;">Mua Hàng</a>
+          </span> 
+          <!-- <span style="height: 50px;width: 200px;background-color: red;text-align: center;margin-left: 20px;">
+            <a href="/giohang/<%= blogposts[i]._id %>" style="color:white;">THÊM VÀO GIỎ </a>
+          </span> -->
+        </div>
+          <button>them gio hang</button>
+
+           
+            
+           
+        </div>
+        <hr>
+        <% } %>
+        <!-- Pager -->
+        <div class="clearfix">
+          <a class="btn btn-primary float-right" href="#">Older Posts &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <%- include('layouts/footer'); -%>
+  <%- include('layouts/scripts'); -%>
+  <section style="position: fixed;height: 100vh;width: 300px;right: 0;top: 0;background-color: rgb(221,195,195);padding: 12px 20px;overflow:scroll;">
+    <form action="">
+      <table>
+      <thead>
+        <th>san pham</th>
+        <th>ten</th>
+      </thead>
+  <tbody>
+    <!-- <tr>
+    <td style="display: flex;align-items: center;;"><img src="/public/img/about-bg.jpg " alt="anh" style="width:20px;height: 10px;"></td>
+    <td><h2><span>123</span></h2></td>
+    <td><input style="width: 50px; outline: none;margin-left: 20px;" type="number" value="1" min="1"></td>
+    <td style="cursor: pointer;margin-left:30px;">xóa</td>
+  </tr>
+   -->
+  
+  </tbody>
+</table>
+<div style="text-align: right;" class="price-total">
+<p style="font-weight: bold;">Tổng tiền: <span>0</span></p>
+<button>Thanh toán</button>
+</div>
+</form>
+</section>
+<script>
+  const btn= document.querySelectorAll("button")
+// console.log(btn)
+btn.forEach(function(button,index){
+  button.addEventListener("click",function(event){{
+    var btnItem = event.target
+    var product = btnItem.parentElement
+    var productImg=product.querySelector("img").src
+    var productName= product.querySelector("h2").innerText
+    var productCost= product.querySelector("h3").innerText
+      //  console.log(productImg)
+
+   addcart(productImg,productName,productCost)
+  }})
+})
+function addcart(productImg,productName,productCost)
+{
+  var addtr = document.createElement("tr")
+  var cartItem = document.querySelectorAll("tbody tr")
+  for(var i = 0;i<cartItem.length;i++)
+  {
+    var productT=document.querySelectorAll(".title1")
+    if(productT[i].innerHTML==productCost)
+    {
+      alert("sản phẩm đã có trong giỏ hàng")
+      return
+    }
+  }
+  var trcontent = '<tr><td style="display: flex;align-items: center;;"><img src="'+productImg+'" alt="anh" style="width:70px"></td> <td><h2><span class="title1">'+productCost+'</span> </h2></td><td><input style="width: 50px; outline: none;margin-left: 20px;" type="number" value="1" min="1"></td><td style="cursor: pointer;margin-left:30px;">xóa</td> </tr>'
+  addtr.innerHTML=trcontent
+  var cartTable= document.querySelector("tbody")
+//console.log(cartTable)
+   cartTable.append(addtr)
+   carttotal()
+   deleteCart()
+}
+function carttotal()
+{
+  var cartItem = document.querySelectorAll("tbody tr")
+  var totalC=0
+  for(var i = 0;i<cartItem.length;i++)
+  {
+    var inputValue = cartItem[i].querySelector("input").value
+    var productPrice =cartItem[i].querySelector(".title1").innerHTML
+    var totalA = inputValue*productPrice
+    totalC=totalC+totalA
+    // console.log(totalC)
+    inputchange()
+
+  }
+  var cartTotalA=document.querySelector(".price-total span")
+  cartTotalA.innerHTML=totalC
+  console.log(cartTotalA)
+  //console.log(cartItem)
+}
+function inputchange()
+{
+  var cartItem=document.querySelectorAll("tbody tr")
+  for(var i=0;i<cartItem.length;i++)
+  {
+    var inputValue = cartItem[i].querySelector("input")
+    inputValue.addEventListener("change",function(){carttotal()})
+  }
+}
+function deleteCart()
+{
+  for(var i = 0;i<cartItem.length;i++)
+  {
+    var productT=document.querySelectorAll(".title1")
+    if(productT[i].innerHTML==productCost)
+    {
+      alert("sản phẩm đã có trong giỏ hàng")
+      return
+    }
+  } 
+}
+
+</script>
+</body>
+
+</html>
